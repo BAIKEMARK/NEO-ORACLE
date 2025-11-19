@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEO-ORACLE | 赛博玄学终端</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyan: {
+                            400: '#00f3ff',
+                            500: '#00dbe6',
+                            900: '#004d52',
+                        },
+                        pink: {
+                            400: '#ff00ff',
+                            500: '#e600e6',
+                            900: '#520052',
+                        },
+                        black: '#050505',
+                        gray: {
+                            800: '#1a1a1a',
+                            900: '#121212',
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['"Noto Sans SC"', 'sans-serif'],
+                    },
+                    animation: {
+                        'spin-slow': 'spin 3s linear infinite',
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'progress': 'progress 2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        progress: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(200%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff00ff;
+            --bg-color: #050505;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #e0e0e0;
+            font-family: 'JetBrains Mono', 'Noto Sans SC', monospace;
+            overflow-x: hidden;
+            /* Cyber grid background */
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* CRT Scanline Overlay */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1),
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.7;
+        }
+
+        /* 3D Transform Utilities */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* Custom Shapes */
+        .clip-corner {
+            clip-path: polygon(
+                10px 0, 100% 0, 
+                100% calc(100% - 10px), 
+                calc(100% - 10px) 100%, 
+                0 100%, 
+                0 10px
+            );
+        }
+        .clip-corner-lg {
+            clip-path: polygon(
+                20px 0, 100% 0, 
+                100% calc(100% - 20px), 
+                calc(100% - 20px) 100%, 
+                0 100%, 
+                0 20px
+            );
+        }
+        .clip-hex {
+             clip-path: polygon(
+                15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px
+            );
+        }
+
+        /* Glitch Effect */
+        .glitch-text {
+            position: relative;
+            color: #fff;
+        }
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+        }
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00c1;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -2px 0 #00fff9;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(34px, 9999px, 11px, 0); }
+            20% { clip: rect(25px, 9999px, 66px, 0); }
+            40% { clip: rect(4px, 9999px, 88px, 0); }
+            60% { clip: rect(89px, 9999px, 2px, 0); }
+            80% { clip: rect(23px, 9999px, 45px, 0); }
+            100% { clip: rect(6px, 9999px, 90px, 0); }
+        }
+        @keyframes glitch-anim2 {
+            0% { clip: rect(12px, 9999px, 55px, 0); }
+            20% { clip: rect(78px, 9999px, 14px, 0); }
+            40% { clip: rect(34px, 9999px, 22px, 0); }
+            60% { clip: rect(5px, 9999px, 81px, 0); }
+            80% { clip: rect(90px, 9999px, 4px, 0); }
+            100% { clip: rect(12px, 9999px, 66px, 0); }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-cyan);
+            border-radius: 3px;
+        }
+
+        /* Neon Button Glow */
+        .neon-button {
+            box-shadow: 0 0 5px var(--neon-pink), inset 0 0 5px var(--neon-pink);
+            text-shadow: 0 0 5px var(--neon-pink);
+        }
+        .neon-button:hover {
+            box-shadow: 0 0 20px var(--neon-pink), inset 0 0 10px var(--neon-pink);
+        }
+        
+        /* Typing Effect */
+        .typing-effect {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid var(--neon-cyan);
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--neon-cyan); }
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "react-markdown": "https://esm.sh/react-markdown@9?bundle"
+  }
+}
+</script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
+</body>
+</html>
